@@ -22,7 +22,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 #Reden TCP port
-PORT=8328
+PORT=11010
 
 
 #Clear keyboard input buffer
