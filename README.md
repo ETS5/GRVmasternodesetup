@@ -75,7 +75,7 @@ git pull
 
 ```bash
 cd ~/GRVmasternodesetup
-sudo bash gravium-setup.sh [Masternode_Private_Key]
+sudo bash Gravium-setup.sh [Masternode_Private_Key]
 ```
 __NOTE:__ This process may take anywhere from 5 to 20 minutes, depending on your VPS HW specs. If it's not your very first ever masternode setup, you may want to speed up the process by doing things in parallel. While the GRVmasternodesetup script is running on the VPS, you can spend this time getting ready to start your new masternode from your Hot Wallet (also referred to as Control Wallet) by following instructions in next step (6).
 
@@ -93,18 +93,18 @@ It does not matter which way you open the file or how you edit it. In either cas
 __Here's what you need to do in masternode.conf file__. For each masternode you are going to setup, you need to enter one separate line of text  which will look like this:
 
 ```bash
-mn1 231.321.11.22:6161 27KTCRKgqjBgQbAS2BN9uX8GHBu16wXfr4z4hNDZWQAubqD8fr6 5d46f69f1770cb051baf594d011f8fa5e12b502ff18509492de28adfe2bbd229 0
+mn1 231.321.11.22:11010 27KTCRKgqjBgQbAS2BN9uX8GHBu16wXfr4z4hNDZWQAubqD8fr6 5d46f69f1770cb051baf594d011f8fa5e12b502ff18509492de28adfe2bbd229 0
 ```
 
 The format for this string is as follow:
 ```bash
-masternodealias publicipaddress:6161 masternodeprivatekey output-tx-ID output-tx-index
+masternodealias publicipaddress:11010 masternodeprivatekey output-tx-ID output-tx-index
 ```
 
 Where:
 __masternodealias__ - your human readable masternode name (alias) which you use to identify the masternode. It can be any unique name as long as you can recognize it. It exists only in your wallet and has no impact on the masternode functionality.
 
-__publicipaddress:6161__ - this must be your masternode public IP address, which is usually the IP address of your VPS, accessible from the Internet. The new script (v1.3) will detect your IP address automatically. The __:6161__ suffix is the predefined and fixed TCP port which is being used in Gravium network for node-to-node and wallet-to-node communications. This port needs to be opened on your VPS server firewall so that others can talk to your masternode. The setup script takes care of it. NOTE: some VPS service providers may have additional firewall on their network which you may need to configure to open TCP port 6161. Vultr does not require this.
+__publicipaddress:11010__ - this must be your masternode public IP address, which is usually the IP address of your VPS, accessible from the Internet. The new script (v1.3) will detect your IP address automatically. The __:11010__ suffix is the predefined and fixed TCP port which is being used in Gravium network for node-to-node and wallet-to-node communications. This port needs to be opened on your VPS server firewall so that others can talk to your masternode. The setup script takes care of it. NOTE: some VPS service providers may have additional firewall on their network which you may need to configure to open TCP port 11010. Vultr does not require this.
 
 __masternodeprivatekey__ - this is your masternode private key which script will generate automatically. Each masternode will use its own unique private key to maintain secure communication with your Hot Wallet. You will have to generate a new key for each masternode you are setting up. Only your masternode and your hot wallet will be in possession of this private key. In case if you will need to change this key later for some reason, you will have to update it in your __masternode.conf__ in Hot Wallet as well as in the gravium.conf in data directory on the masternode VPS.
 
@@ -202,7 +202,7 @@ The expected output for a functioning masternode will eventually look like this:
 ```
 {
   "vin": "CTxIn(COutPoint(cbe3c99bed2c874a14675c54004a5b5bfda8473b98bfbd80a15743c2a1117d4f, 1), scriptSig=)",
-  "service": "188.166.24.178:6161",
+  "service": "188.166.24.178:11010",
   "payee": "oN3ZoisQkdsCuXj7799kEcvJkWk6Bhc4uJ",
   "status": "Masternode successfully started"
 }
@@ -236,14 +236,14 @@ Outbound connections to other Gravium nodes [Gravium datadir: /root/.graviumcore
 Node IP               Ping    Rx/Tx     Since  Hdrs   Height  Time   Ban
 Address               (ms)   (KBytes)   Block  Syncd  Blocks  (min)  Score
 ===========================================================================
-159.65.182.234:6161  84    922/255   46207   46210   46210    141   0
-85.15.69.230:6161    153   916/269   46208   46208   46208    141   0
-118.27.12.51:6161    273   866/217   46210   46210   46210    141   0
-84.200.17.128:6161   9     1043/268  46210   46342   46342    141   0
-113.28.67.49:6161    254   49/49     46313   46313   46313    27    0
-172.245.209.8:6161   85    56/61     46315   46315   46315    25    0
-167.99.43.152:6161   2     793/35    23461   23461   -1       24    0
-198.13.56.178:6161   259   38/40     46318   46318   46318    23    0
+159.65.182.234:11010  84    922/255   46207   46210   46210    141   0
+85.15.69.230:11010    153   916/269   46208   46208   46208    141   0
+118.27.12.51:11010    273   866/217   46210   46210   46210    141   0
+84.200.17.128:11010   9     1043/268  46210   46342   46342    141   0
+113.28.67.49:11010    254   49/49     46313   46313   46313    27    0
+172.245.209.8:11010   85    56/61     46315   46315   46315    25    0
+167.99.43.152:11010   2     793/35    23461   23461   -1       24    0
+198.13.56.178:11010   259   38/40     46318   46318   46318    23    0
 ===========================================================================
  17:51:38 up 23:52,  1 user,  load average: 0.00, 0.00, 0.00
 ===========================================================================
@@ -251,7 +251,7 @@ Masternode Status:
 # Gravium masternode status
 {
   "outpoint": "a71513f3c29a44eea69bb90759d4cbc89c7594c41fa4932e309617a6faeccafe-1",
-  "service": "188.166.24.178:6161",
+  "service": "188.166.24.178:11010",
   "payee": "oS8M3Unrm4tQ21Ew9g3ryuqYB2gjExjXRt",
   "status": "Masternode successfully started"
 }
@@ -308,3 +308,4 @@ or BTC to **3H1JNkydHxDbhoXLREpxXccvyNh7Awr2jX**
 
 
 (c) 2018 by Rush Hour, for GRV
+
