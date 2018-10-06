@@ -27,22 +27,21 @@ PORT=11010
 
 #Clear keyboard input buffer
 function clear_stdin { while read -r -t 0; do read -r; done; }
-
 #Delay script execution for N seconds
 function delay { echo -e "${GREEN}Sleep for $1 seconds...${NC}"; sleep "$1"; }
-
 #Stop daemon if it's already running
+
 function stop_daemon {
-    if pgrep -x 'graviumd' > /dev/null; then
+    if pgrep -x 'mctd' > /dev/null; then
         echo -e "${YELLOW}Attempting to stop graviumd${NC}"
         gravium-cli stop
         delay 30
         if pgrep -x 'graviumd' > /dev/null; then
             echo -e "${RED}graviumd daemon is still running!${NC} \a"
             echo -e "${YELLOW}Attempting to kill...${NC}"
-            pkill graviumd
+            pkill mctd
             delay 30
-            if pgrep -x 'graviumd' > /dev/null; then
+            if pgrep -x 'mctd' > /dev/null; then
                 echo -e "${RED}Can't stop graviumd! Reboot and try again...${NC} \a"
                 exit 2
             fi
@@ -54,7 +53,7 @@ function stop_daemon {
 genkey=$1
 
 clear
-echo -e "${YELLOW}Gravium Masternode Setup Script V1.3 for Ubuntu 16.04 LTS${NC}"
+echo -e "${YELLOW}(c) 2018 by Rush Hour, Gravium Masternode Setup Script V1.3 for Ubuntu 16.04 LTS${NC}"
 echo -e "${GREEN}Updating system and installing required packages...${NC}"
 sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 
@@ -95,16 +94,47 @@ sudo service fail2ban restart
 
 sudo apt-get install ufw -y
 sudo apt-get update -y
+sudo apt-get upgrade -yet
 
+sudo apt install unzip
+
+#Network Settings
+echo -e "${GREEN}Installing Network Settings...${NC}"
+{
+sudo apt-get install ufw -y
+} &> /dev/null
+echo -ne '[##                 ]  (10%)\r'
+{
+sudo apt-get update -y
+} &> /dev/null
+echo -ne '[######             ] (30%)\r'
+{
 sudo ufw default deny incoming
+} &> /dev/null
+echo -ne '[#########          ] (50%)\r'
+{
 sudo ufw default allow outgoing
 sudo ufw allow ssh
+} &> /dev/null
+echo -ne '[###########        ] (60%)\r'
+{
 sudo ufw allow $PORT/tcp
+sudo ufw allow $RPC/tcp
+} &> /dev/null
+echo -ne '[###############    ] (80%)\r'
+{
 sudo ufw allow 22/tcp
 sudo ufw limit 22/tcp
+} &> /dev/null
+echo -ne '[#################  ] (90%)\r'
+{
 echo -e "${YELLOW}"
 sudo ufw --force enable
 echo -e "${NC}"
+} &> /dev/null
+echo -ne '[###################] (100%)\n'
+
+echo -e "${GREEN}Packages complete....${NC}"
 
 #Generating Random Password for graviumd JSON RPC
 rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
@@ -131,16 +161,19 @@ fi
 
 #Installing Daemon
 cd ~
+mkdir gravium
+cd gravium
 wget https://github.com/Gravium/gravium/releases/download/v1.0.2/graviumcore-1.0.2-linux64.tar.gz
 sudo tar -xvf graviumcore-1.0.2-linux64.tar.gz 
 sudo rm -rf graviumcore-1.0.2-linux64.tar.gz
-sudo mv ~/graviumcore-1.0.2* ~/GRVmasternodesetup/
 
 stop_daemon
 
 # Deploy binaries to /usr/bin
-sudo cp GRVmasternodesetup/graviumcore-1.0.2//bin/gravium* /usr/bin/
-sudo chmod 755 -R ~/GRVmasternodesetup
+sudo cp gravium/graviumcore-1.0.2/bin/gravium* /usr/bin/
+sudo chmod 755 -R ~/gravium
+sudo chmod 755 -R ~/gravium/graviumcore-1.0.2
+sudo chmod 755 -R ~/gravium/graviumcore-1.0.2/bin
 sudo chmod 755 /usr/bin/gravium*
 
 # Deploy masternode monitoring script
@@ -165,8 +198,17 @@ EOF
 
     #Starting daemon first time just to generate masternode private key
     graviumd -daemon
-    delay 30
-
+    echo -ne '[##                 ] (15%)\r'
+    sleep 6
+    echo -ne '[######             ] (30%)\r'
+    sleep 9
+    echo -ne '[########           ] (45%)\r'
+    sleep 6
+    echo -ne '[##############     ] (72%)\r'
+    sleep 10
+    echo -ne '[###################] (100%)\r'
+    echo -ne '\n'
+    
     #Generate masternode private key
     echo -e "${YELLOW}Generating masternode private key...${NC}"
     genkey=$(gravium-cli masternode genkey)
