@@ -173,6 +173,7 @@ sudo rm -r ~/gravium/graviumcore-1.0.2
 stop_daemon
 
 # Deploy binaries to /usr/bin
+cd ~
 sudo cp gravium/gravium* /usr/bin/
 sudo chmod 755 -R ~/gravium
 sudo chmod 755 /usr/bin/gravium*
