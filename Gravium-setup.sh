@@ -166,14 +166,15 @@ cd gravium
 wget https://github.com/Gravium/gravium/releases/download/v1.0.2/graviumcore-1.0.2-linux64.tar.gz
 sudo tar -xvf graviumcore-1.0.2-linux64.tar.gz 
 sudo rm -rf graviumcore-1.0.2-linux64.tar.gz
+sudo mv ~/gravium/graviumcore-1.0.2/bin/gravium* ~/gravium/
+cd gravium
+sudo rm -r ~/gravium/graviumcore-1.0.2
 
 stop_daemon
 
 # Deploy binaries to /usr/bin
-sudo cp gravium/graviumcore-1.0.2/bin/gravium* /usr/bin/
+sudo cp gravium/gravium* /usr/bin/
 sudo chmod 755 -R ~/gravium
-sudo chmod 755 -R ~/gravium/graviumcore-1.0.2
-sudo chmod 755 -R ~/gravium/graviumcore-1.0.2/bin
 sudo chmod 755 /usr/bin/gravium*
 
 # Deploy masternode monitoring script
